@@ -1,0 +1,38 @@
+/**
+ * Created by Mingo on 2017/5/24.
+ */
+import android.annotation.TargetApi;
+import android.os.Build;
+import android.provider.Settings;
+import android.util.Log;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+
+public class postAspectj {
+    ///在POST的body构造中add函数可以截获name和value值
+    private static final String METHOD_EXECUTION = "execution(* add(..))&&args(name)&&args(value)";
+
+    private String TAG = "";
+
+    @Pointcut(METHOD_EXECUTION)
+
+    public void methodExecution(String name,String value) {
+   }
+   //使用Before这种advice
+   @Before("methodExecution(String,String)")
+     //执行切片并打印log，返回参数值
+    public void MethodExecution(JoinPoint joinPoint) throws Throwable {
+
+        String name = (String) joinPoint.getArgs()[0];
+        String value = (String) joinPoint.getArgs()[1];
+         Log.e(TAG,name );
+         Log.e(TAG, value);
+    }
+}
